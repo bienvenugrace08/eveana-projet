@@ -1,0 +1,52 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateTicketDto = void 0;
+const class_validator_1 = require("class-validator");
+const ticket_enums_1 = require("../enums/ticket.enums");
+class CreateTicketDto {
+}
+exports.CreateTicketDto = CreateTicketDto;
+__decorate([
+    (0, class_validator_1.IsUUID)('4', { message: 'eventId doit être un identifiant valide' }),
+    __metadata("design:type", String)
+], CreateTicketDto.prototype, "eventId", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(2, { message: 'Le nom complet est requis' }),
+    __metadata("design:type", String)
+], CreateTicketDto.prototype, "buyerName", void 0);
+__decorate([
+    (0, class_validator_1.IsEmail)({}, { message: 'Adresse email invalide' }),
+    __metadata("design:type", String)
+], CreateTicketDto.prototype, "buyerEmail", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateTicketDto.prototype, "buyerPhone", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(ticket_enums_1.TicketType, { message: 'Type de billet invalide (early ou standard)' }),
+    __metadata("design:type", String)
+], CreateTicketDto.prototype, "ticketType", void 0);
+__decorate([
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1, { message: 'La quantité minimale est 1' }),
+    (0, class_validator_1.Max)(10, { message: 'La quantité maximale est 10 par commande' }),
+    __metadata("design:type", Number)
+], CreateTicketDto.prototype, "quantity", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateTicketDto.prototype, "notes", void 0);
+//# sourceMappingURL=create-ticket.dto.js.map
