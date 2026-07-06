@@ -10,6 +10,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
 import EventManagement from './pages/EventManagement';
 import ArtistManagement from './pages/ArtistManagement';
+import UserManagement from './pages/UserManagement';
 import Artists from './pages/Artists';
 import Schedule from './pages/Schedule';
 import Pricing from './pages/Pricing';
@@ -37,6 +38,7 @@ const App: React.FC = () => {
             {/* Admin gestion événements */}
             <Route path="/admin/events" element={<EventManagement />} />
             <Route path="/admin/artists" element={<ArtistManagement />} />
+            <Route path="/admin/users" element={<UserManagement />} />
 
             {/* Autres pages publiques */}
             <Route path="/artists" element={<Artists />} />

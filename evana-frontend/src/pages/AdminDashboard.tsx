@@ -8,6 +8,7 @@ import {
   BarChart3,
   Ticket,
   Music2,
+  Users,
   CalendarDays,
 } from 'lucide-react';
 import TicketsLineChart from '../components/charts/TicketsLineChart';
@@ -28,6 +29,7 @@ const AdminDashboard: React.FC = () => {
   const [events, setEvents] = useState<any[]>([]);
   const [tickets, setTickets] = useState<any[]>([]);
   const [artistsCount, setArtistsCount] = useState<number>(0);
+  const [usersCount, setUsersCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,14 +38,16 @@ const AdminDashboard: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const [eventsData, ticketsData, artistsData] = await Promise.all([
+      const [eventsData, ticketsData, artistsData, usersData] = await Promise.all([
         api.events.findAll(),
         api.tickets.findAll(token),
         api.artists.findAll(),
+        api.users.findAll(token),
       ]);
       setEvents(eventsData || []);
       setTickets(ticketsData || []);
       setArtistsCount((artistsData || []).length);
+      setUsersCount((usersData || []).length);
     } catch (err: any) {
       setError(err.message || 'Impossible de charger les données du tableau de bord.');
     } finally {
@@ -105,7 +109,7 @@ const AdminDashboard: React.FC = () => {
     .slice(0, 3);
 
   // Ville utilisée pour la météo : celle du prochain événement à venir
-  const weatherCity = (upcomingEvents[0]?.location || 'Dakar').split(',').pop()?.trim() || 'Dakar';
+  const weatherCity = upcomingEvents[0]?.city || 'Dakar';
 
   // Dernières ventes de billets (activité récente)
   const recentActivity = [...tickets]
@@ -148,6 +152,13 @@ const AdminDashboard: React.FC = () => {
           >
             <Music2 className="w-4 h-4" />
             <span>Artistes programmés</span>
+          </button>
+          <button
+            onClick={() => navigate('/admin/users')}
+            className="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-650 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition font-medium"
+          >
+            <Users className="w-4 h-4" />
+            <span>Utilisateurs</span>
           </button>
         </nav>
 
@@ -200,6 +211,7 @@ const AdminDashboard: React.FC = () => {
               { label: 'Billets vendus', value: stats.ticketsSold, sub: 'Total, hors annulations' },
               { label: 'Revenus générés', value: `${stats.revenue.toLocaleString('fr-FR')} CFA`, sub: 'Ventes de pass' },
               { label: 'Artistes au lineup', value: artistsCount, sub: 'Confirmés' },
+              { label: 'Utilisateurs inscrits', value: usersCount, sub: 'Comptes créés' },
             ].map((kpi, idx) => (
               <div key={idx} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 shadow-soft">
                 <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase">{kpi.label}</p>
@@ -223,8 +235,8 @@ const AdminDashboard: React.FC = () => {
                   <p className="text-xs text-slate-400">Total cumulé des pass achetés par mois</p>
                 </div>
               </div>
-              <div className="h-64 flex items-center justify-center">
-                <TicketsLineChart />
+              <div className="h-64 w-full">
+                <TicketsLineChart tickets={tickets} />
               </div>
             </div>
 
